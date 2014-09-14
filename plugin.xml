@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      
+      <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaProject"
+            id="SimplePopupMenu.contribution1">
+         <menu
+               label="Walkmod"
+               path="additions"
+               id="SimplePopupMenu.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+          <action
+               label="Install plugins"
+               class="simplepopupmenu.popup.actions.InstallAction"
+               menubarPath="SimplePopupMenu.menu1/group1"
+               enablesFor="1"
+               id="SimplePopupMenu.installAction">
+         </action>
+          <action
+               label="Check Conventions"
+               class="simplepopupmenu.popup.actions.CheckAction"
+               menubarPath="SimplePopupMenu.menu1/group1"
+               enablesFor="1"
+               id="SimplePopupMenu.checkAction">
+         </action> 
+         <action
+               label="Apply Conventions"
+               class="simplepopupmenu.popup.actions.ApplyAction"
+               menubarPath="SimplePopupMenu.menu1/group1"
+               enablesFor="1"
+               id="SimplePopupMenu.applyAction">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>
