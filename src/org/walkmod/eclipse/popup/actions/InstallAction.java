@@ -1,4 +1,4 @@
-package simplepopupmenu.popup.actions;
+package org.walkmod.eclipse.popup.actions;
 
 import java.util.List;
 

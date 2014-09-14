@@ -17,25 +17,28 @@
             </separator>
          </menu>
           <action
-               label="Install plugins"
-               class="simplepopupmenu.popup.actions.InstallAction"
+               label="walkmod install"
+               class="org.walkmod.eclipse.popup.actions.InstallAction"
                menubarPath="SimplePopupMenu.menu1/group1"
                enablesFor="1"
-               id="SimplePopupMenu.installAction">
+               id="SimplePopupMenu.installAction"
+               icon="icons/hoja.png">
          </action>
           <action
-               label="Check Conventions"
-               class="simplepopupmenu.popup.actions.CheckAction"
+               label="walkmod check"
+               class="org.walkmod.eclipse.popup.actions.CheckAction"
                menubarPath="SimplePopupMenu.menu1/group1"
                enablesFor="1"
-               id="SimplePopupMenu.checkAction">
+               id="SimplePopupMenu.checkAction"
+               icon="icons/hoja.png">
          </action> 
          <action
-               label="Apply Conventions"
-               class="simplepopupmenu.popup.actions.ApplyAction"
+               label="walkmod apply"
+               class="org.walkmod.eclipse.popup.actions.ApplyAction"
                menubarPath="SimplePopupMenu.menu1/group1"
                enablesFor="1"
-               id="SimplePopupMenu.applyAction">
+               id="SimplePopupMenu.applyAction"
+               icon="icons/hoja.png">
          </action>
       </objectContribution>
    </extension>

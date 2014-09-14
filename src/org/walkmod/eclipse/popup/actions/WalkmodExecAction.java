@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package simplepopupmenu.popup.actions;
+package org.walkmod.eclipse.popup.actions;
 
 import java.io.File;
 import java.net.URL;

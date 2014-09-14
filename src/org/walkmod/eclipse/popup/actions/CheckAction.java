@@ -1,4 +1,4 @@
-package simplepopupmenu.popup.actions;
+package org.walkmod.eclipse.popup.actions;
 
 import java.util.List;
 
@@ -14,14 +14,14 @@ import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-public class ApplyAction implements IObjectActionDelegate {
+public class CheckAction implements IObjectActionDelegate {
 
 	private ISelection selection = null;
 
 	/**
 	 * Constructor for Action1.
 	 */
-	public ApplyAction() {
+	public CheckAction() {
 		super();
 	}
 
@@ -56,7 +56,7 @@ public class ApplyAction implements IObjectActionDelegate {
 				try {
 					IAction action1 = new WalkmodExecAction(
 							JavaRuntime.getDefaultVMInstall(), workingDir,
-							"apply");
+							"check");
 					action1.run();
 
 				} catch (Exception e) {
@@ -74,5 +74,6 @@ public class ApplyAction implements IObjectActionDelegate {
 	public void selectionChanged(IAction action, ISelection selection) {
 		this.selection = selection;
 	}
+
 
 }

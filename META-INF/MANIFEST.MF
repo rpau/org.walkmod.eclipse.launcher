@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Walkmod For Eclispe
 Bundle-SymbolicName: org.walkmod.w4e;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: simplepopupmenu.Activator
+Bundle-Activator: org.walkmod.eclipse.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
