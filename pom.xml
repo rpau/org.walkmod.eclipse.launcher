@@ -31,22 +31,7 @@
 			</plugin>
  -->
 
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>pde-maven-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<eclipseInstall>C:\Users\rpau\apps\eclipse</eclipseInstall>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>attach</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
