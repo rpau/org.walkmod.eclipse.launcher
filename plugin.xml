@@ -23,11 +23,12 @@
                enablesFor="1"
                id="SimplePopupMenu.installAction"
                icon="icons/hoja.png">
+                
          </action>
           <action
                label="walkmod check"
                class="org.walkmod.eclipse.popup.actions.CheckAction"
-               menubarPath="SimplePopupMenu.menu1/group1"
+               menubarPath="SimplePopupMenu.menu1/group1"	
                enablesFor="1"
                id="SimplePopupMenu.checkAction"
                icon="icons/hoja.png">
@@ -41,6 +42,50 @@
                icon="icons/hoja.png">
          </action>
       </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.walkmod.eclipse.preferences.WalkmodPreferencePage"
+            id="org.walkmod.eclipse.preferences.WalkmodPreferencePage"
+            name="Walkmod">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.walkmod.eclipse.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+   </extension>
+
+   <extension  point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+         <launchConfigurationTypeImage
+        icon="icons/hoja.png"
+        configTypeID="org.walkmod.eclipse.launching.launchConfigurationType"
+        id="org.walkmod.eclipse.launching.launchConfigurationTypeImage">
+    </launchConfigurationTypeImage>
+   </extension>
+   
+   <extension point="org.eclipse.debug.core.launchConfigurationTypes">   
+	   <launchConfigurationType
+	        name="Walkmod"
+	        delegate="org.walkmod.eclipse.launching.WalkmodLaunchDelegate"
+	        modes="run"               
+	        id="org.walkmod.eclipse.launching.launchConfigurationType">        
+	    </launchConfigurationType>
+	</extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            type="org.walkmod.eclipse.launching.launchConfigurationType"
+            class="org.walkmod.eclipse.launching.WalkmodTabGroup"
+            id="org.walkmod.eclipse.launching.launchConfigurationTabGroup"
+            bannerImage="icons/hoja.png">
+            
+      </launchConfigurationTabGroup>
    </extension>
 
 </plugin>
