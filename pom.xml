@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.walkmod</groupId>
-	<artifactId>eclipse-walkmod-plugin</artifactId>
+	<artifactId>walkmod4eclipse</artifactId>
 	<version>1.0.0</version>
 	<description>Eclipse plugin to run walkmod from eclipse</description>
 	<url>https://github.com/rpau/walkmod4eclipse</url>
@@ -44,7 +44,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.resources[0].directory}/org/walkmod/lib</outputDirectory>
+							<outputDirectory>org/walkmod/lib</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
@@ -68,7 +68,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.walkmod</groupId>
-			<artifactId>walkmod-cmd</artifactId>
+			<artifactId>walkmod-core</artifactId>
 			<version>[1.0.3, 2.0)</version>
 			<scope>runtime</scope>
 		</dependency>
