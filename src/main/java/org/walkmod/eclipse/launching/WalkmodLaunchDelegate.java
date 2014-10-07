@@ -64,7 +64,7 @@ public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 			if(installDir.startsWith("EXTERNAL (")){
 				installDir = installDir.substring("EXTERNAL (".length(), installDir.lastIndexOf(")"));
 			}
-			configDirectoryURI = new File(installDir).toURI();
+			configDirectoryURI = new File(installDir, "config").toURI();
 		}
 		return new File(configDirectoryURI);
 	}
