@@ -5,6 +5,7 @@ import java.io.File;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
+import org.walkmod.eclipse.launching.Activator;
 import org.walkmod.eclipse.preferences.PreferenceConstants;
 
 public class WalkmodHomeEditor extends DirectoryFieldEditor {

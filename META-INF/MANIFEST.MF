@@ -1,16 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: walkmod launcher
-Bundle-SymbolicName: org.walkmod.w4e;singleton:=true
+Bundle-SymbolicName: org.walkmod.eclipse.launcher;singleton:=true
 Bundle-Version: 1.0.0
-Bundle-Activator: org.walkmod.eclipse.Activator
+Bundle-Activator: org.walkmod.eclipse.launching.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.core.resources,
- org.eclipse.jdt.core;bundle-version="3.9.0",
- org.eclipse.debug.core;bundle-version="3.8.0",
- org.eclipse.jdt.launching;bundle-version="3.7.0",
- org.eclipse.debug.ui;bundle-version="3.9.0",
- org.eclipse.jdt.debug.ui;bundle-version="3.6.300"
+ org.eclipse.core.resources;bundle-version="3.9.1",
+ org.eclipse.jdt.core;bundle-version="3.10.0",
+ org.eclipse.debug.core;bundle-version="3.9.1",
+ org.eclipse.jdt.launching;bundle-version="3.7.101",
+ org.eclipse.debug.ui;bundle-version="3.10.1",
+ org.eclipse.jdt.debug.ui;bundle-version="3.6.300",
+ org.walkmod.eclipse.libs;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

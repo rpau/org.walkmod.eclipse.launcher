@@ -32,7 +32,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.PlatformUI;
-import org.walkmod.eclipse.Activator;
 import org.walkmod.eclipse.preferences.PreferenceConstants;
 import org.walkmod.eclipse.utils.WalkmodConfig;
 

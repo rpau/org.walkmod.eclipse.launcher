@@ -14,7 +14,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Event;
-import org.walkmod.eclipse.Activator;
+import org.walkmod.eclipse.launching.Activator;
 import org.walkmod.eclipse.launching.LaunchingConstants;
 import org.walkmod.eclipse.preferences.PreferenceConstants;
 
@@ -62,9 +62,14 @@ public class WalkmodExecAction extends Action implements IAction,
 						walkmodHome);
 			}
 
-			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY,
+			workingCopy.setAttribute(
+					IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY,
 					workingDir.toFile().getAbsolutePath());
-			
+
+			workingCopy.setAttribute(
+					IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
+					workingDir.toFile().getName());
+
 			ILaunchConfiguration configuration = workingCopy.doSave();
 
 			DebugUITools.launch(configuration, ILaunchManager.RUN_MODE);

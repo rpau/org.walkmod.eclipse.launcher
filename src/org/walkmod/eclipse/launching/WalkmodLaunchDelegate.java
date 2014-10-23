@@ -1,13 +1,14 @@
 package org.walkmod.eclipse.launching;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URL;
+import java.io.IOException;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.internal.launching.LaunchingMessages;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -15,12 +16,14 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.osgi.util.NLS;
-import org.walkmod.eclipse.Activator;
+import org.osgi.framework.Bundle;
 import org.walkmod.eclipse.preferences.PreferenceConstants;
 
 public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 
-	
+	private Bundle bundle = Platform.getBundle("org.walkmod.eclipse.libs");
+
+	private String log4jCfgFile = "log4j.properties";
 
 	@SuppressWarnings("restriction")
 	@Override
@@ -43,58 +46,99 @@ public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 		return vm;
 	}
 
-	public File getConfigDir(ILaunchConfiguration configuration)
+	public List<String> getConfigDir(ILaunchConfiguration configuration)
 			throws CoreException {
-		URI configDirectoryURI = null;
+
 		String installDir = configuration.getAttribute(
 				LaunchingConstants.INSTALL_DIR, "");
-
-		if (installDir == null || "".equals(installDir.trim()) || installDir.startsWith("EMBEDDED")) {
-
-			URL configPath = Thread.currentThread().getContextClassLoader()
-					.getResource("/org/walkmod/config");
-			try {
-				configDirectoryURI = FileLocator.resolve(configPath).toURI();
-			} catch (Exception e) {
-				throw new RuntimeException(
-						"The system cannot resolve the config directory");
+		List<String> result = new LinkedList<String>();
+		if (installDir == null || "".equals(installDir.trim())
+				|| installDir.startsWith("EMBEDDED")) {
+			
+			Enumeration<String> classPath = bundle.getEntryPaths("/");
+			while (classPath.hasMoreElements()) {
+				String entry = classPath.nextElement();
+				try {
+					String file = FileLocator.resolve(bundle.getEntry(entry))
+							.getFile();
+					if (file.endsWith(log4jCfgFile)) {
+						log4jCfgFile = file;
+					}
+					//result.add(file);
+				} catch (IOException e) {
+					RuntimeException re = new RuntimeException(
+							"Error resolving the lib paths");
+					re.setStackTrace(e.getStackTrace());
+					throw re;
+				}
 			}
 
 		} else {
-			if(installDir.startsWith("EXTERNAL (")){
-				installDir = installDir.substring("EXTERNAL (".length(), installDir.lastIndexOf(")"));
+			if (installDir.startsWith("EXTERNAL (")) {
+				installDir = installDir.substring("EXTERNAL (".length(),
+						installDir.lastIndexOf(")"));
 			}
-			configDirectoryURI = new File(installDir, "config").toURI();
+			File configDir = new File(installDir, "config");
+			File[] content = configDir.listFiles();
+			for (File entry : content) {
+				if (entry.getName().endsWith(log4jCfgFile)) {
+					log4jCfgFile = entry.getAbsolutePath();
+				}
+				result.add(entry.getAbsolutePath());
+			}
 		}
-		return new File(configDirectoryURI);
+		return result;
 	}
 
-	public File getLibDir(ILaunchConfiguration configuration)
+	public List<String> getLibDir(ILaunchConfiguration configuration)
 			throws CoreException {
-		URI libDirectoryURI = null;
+
 		String installDir = configuration.getAttribute(
 				LaunchingConstants.INSTALL_DIR, "");
+		List<String> result = new LinkedList<String>();
 
-		if (installDir == null || "".equals(installDir.trim()) || installDir.startsWith("EMBEDDED")) {
-
-			URL classPath = Thread.currentThread().getContextClassLoader()
-					.getResource("/org/walkmod/lib");
+		if (installDir == null || "".equals(installDir.trim())
+				|| installDir.startsWith("EMBEDDED")) {
 			try {
-				libDirectoryURI = FileLocator.resolve(classPath).toURI();
-			} catch (Exception e) {
-				throw new RuntimeException(
-						"The system cannot resolve walkmod lib directory");
+				result.add(BundleUtils.getBundleLocation(bundle).getAbsolutePath());
+			} catch (IOException e) {
+				RuntimeException re = new RuntimeException("Error resolving bundle");
+				re.setStackTrace(e.getStackTrace());
+				throw re;
 			}
+			
+			/*
+			Enumeration<URL> classPath = bundle.findEntries(
+					"org/walkmod/lib", "*.jar", true);
+
+			while (classPath.hasMoreElements()) {
+				URL entry = classPath.nextElement();
+				try {
+					String file = FileLocator.resolve(entry).getFile();
+					System.out.println("lib: " + file);
+					result.add(file);
+				} catch (IOException e) {
+					RuntimeException re = new RuntimeException(
+							"Error resolving the lib paths");
+					re.setStackTrace(e.getStackTrace());
+					throw re;
+				}
+			}*/
 		}
 
 		else {
-			if(installDir.startsWith("EXTERNAL (")){
-				installDir = installDir.substring("EXTERNAL (".length(), installDir.lastIndexOf(")"));
+			if (installDir.startsWith("EXTERNAL (")) {
+				installDir = installDir.substring("EXTERNAL (".length(),
+						installDir.lastIndexOf(")"));
 			}
-			libDirectoryURI = new File(installDir, "lib").toURI();
+			File lib = new File(installDir, "lib");
+			File[] content = lib.listFiles();
+			for (File entry : content) {
+				result.add(entry.getAbsolutePath());
+			}
 		}
 
-		return new File(libDirectoryURI);
+		return result;
 
 	}
 
@@ -104,21 +148,9 @@ public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 
 		List<String> classPathEntries = new LinkedList<String>();
 
-		File file = getLibDir(configuration);
-		if (file.exists()) {
-			File[] libs = file.listFiles();
-			for (File lib : libs) {
-				classPathEntries.add(lib.getAbsolutePath());
-			}
-		}
+		classPathEntries.addAll(getLibDir(configuration));
 
-		File configDir = getConfigDir(configuration);
-		if (configDir.exists()) {
-			File[] configFiles = configDir.listFiles();
-			for (File config : configFiles) {
-				classPathEntries.add(config.getAbsolutePath());
-			}
-		}
+		classPathEntries.addAll(getConfigDir(configuration));
 
 		return classPathEntries.toArray(new String[classPathEntries.size()]);
 
@@ -162,9 +194,15 @@ public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 		boolean printErrorMessages = configuration.getAttribute(
 				LaunchingConstants.PRINT_ERRORS_OPTION, false);
 
-		String args = "-Dlog4j.configuration=\""
-				+ new File(getConfigDir(configuration), "log4j.properties")
-						.getAbsolutePath() + "\"";
+		String args = "";
+
+		try {
+			args = "-Dlog4j.configuration=\"" + log4jCfgFile + "\"";
+		} catch (Exception e) {
+			RuntimeException re = new RuntimeException();
+			re.setStackTrace(e.getStackTrace());
+			throw re;
+		}
 		if (isOffline) {
 			args += " --offline";
 		}

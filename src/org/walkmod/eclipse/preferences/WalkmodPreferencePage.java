@@ -5,7 +5,7 @@ import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.walkmod.eclipse.Activator;
+import org.walkmod.eclipse.launching.Activator;
 import org.walkmod.eclipse.WalkmodHomeEditor;
 
 /**

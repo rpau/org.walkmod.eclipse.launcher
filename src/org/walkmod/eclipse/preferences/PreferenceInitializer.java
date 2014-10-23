@@ -2,7 +2,7 @@ package org.walkmod.eclipse.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.walkmod.eclipse.Activator;
+import org.walkmod.eclipse.launching.Activator;
 
 /**
  * Class used to initialize default preference values.
