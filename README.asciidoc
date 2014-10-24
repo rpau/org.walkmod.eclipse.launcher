@@ -1,0 +1,25 @@
+org.walkmod.eclipse.launcher
+============================
+Raquel Pau <raquelpau@gmail.com>
+
+This project is an eclipse plugin to launch http://www.walkmod.com[walkmod] from the Eclipse IDE. You 
+can run an embedded walkmod installation or a custom one.  
+
+The software site to install it is `http://www.walkmod.com/site/`. 
+
+== Installation
+
+Once you Eclipse is launched, go to `Help > Install New Software`. Press the `Add` button to add a new software 
+ 
+repository and add the following location: `http://www.walkmod.com/site/`. After that, select this location and install
+
+the whole category `walkmod tools for eclipse`.
+
+That's all! Have fun!
+  
+
+== Contributions
+
+All pull requests are welcome :), but if you have some suggestions, comments or you detect a bug, 
+
+feel free to create an issue.  
