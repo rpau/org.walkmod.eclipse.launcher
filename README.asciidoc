@@ -11,7 +11,7 @@ The software site to install it is `http://www.walkmod.com/site/`.
 
 Once you Eclipse is launched, go to `Help > Install New Software`. Press the `Add` button to add the following location: `http://www.walkmod.com/site/`. After that, select this location and install the whole category `walkmod tools for eclipse`.
 
-image:images/logo.png[Company Logo]
+image:https://raw.githubusercontent.com/rpau/walkmod4eclipse/master/img/install.png[[scaledwidth="30%",alt="install"]]
 
 That's all! Have fun!
 
