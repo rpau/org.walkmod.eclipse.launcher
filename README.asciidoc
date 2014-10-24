@@ -20,6 +20,8 @@ That's all! Have fun!
 After installing this Eclipse plugin, you will have a new menu called `Walkmod` when you right click the mouse on a Java project.
 
 image:img/usage.png[[scaledwidth="100%",alt="usage"]
+
+If you want to use a custom installation, you can configure it permanently in the `Window > Preferences > Walkmod` or creating an specific Runtime configuration.
   
 
 == Contributions
