@@ -17,7 +17,9 @@ That's all! Have fun!
 
 == Usage
 
+After installing this Eclipse plugin, you will have a new menu called `Walkmod` when you right click the mouse on a Java project.
 
+image:img/usage.png[[scaledwidth="100%",alt="usage"]
   
 
 == Contributions
