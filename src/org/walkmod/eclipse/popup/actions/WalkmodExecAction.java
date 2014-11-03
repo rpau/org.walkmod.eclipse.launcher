@@ -16,7 +16,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Event;
 import org.walkmod.eclipse.launching.Activator;
 import org.walkmod.eclipse.launching.LaunchingConstants;
-import org.walkmod.eclipse.preferences.PreferenceConstants;
 
 /**
  * Starts Tomcat on a specific JRE
@@ -51,17 +50,6 @@ public class WalkmodExecAction extends Action implements IAction,
 			workingCopy
 					.setAttribute(LaunchingConstants.SELECTED_OPTION, option);
 
-			IPreferenceStore store = Activator.getDefault()
-					.getPreferenceStore();
-			if (store.getBoolean(PreferenceConstants.WALKMOD_IS_EMBEDDED)) {
-				workingCopy.setAttribute(LaunchingConstants.INSTALL_DIR, "");
-			} else {
-				String walkmodHome = store
-						.getString(PreferenceConstants.WALKMOD_EXTERNAL_HOME);
-				workingCopy.setAttribute(LaunchingConstants.INSTALL_DIR,
-						walkmodHome);
-			}
-
 			workingCopy.setAttribute(
 					IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY,
 					workingDir.toFile().getAbsolutePath());
@@ -70,12 +58,18 @@ public class WalkmodExecAction extends Action implements IAction,
 					IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
 					workingDir.toFile().getName());
 
-			ILaunchConfiguration configuration = workingCopy.doSave();
+			IPreferenceStore store = Activator.getDefault()
+					.getPreferenceStore();
 
-			DebugUITools.launch(configuration, ILaunchManager.RUN_MODE);
+			workingCopy.setAttribute(LaunchingConstants.INSTALL_DIR,
+					store.getString(LaunchingConstants.INSTALL_DIR));
+
+			DebugUITools.launch(workingCopy, ILaunchManager.RUN_MODE);
+			
+			workingCopy.doSave();
 
 		} catch (CoreException e) {
-			RuntimeException re = new RuntimeException();
+			RuntimeException re = new RuntimeException(e.getMessage());
 			re.setStackTrace(e.getStackTrace());
 			throw re;
 		}

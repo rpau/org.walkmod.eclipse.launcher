@@ -2,12 +2,10 @@ package org.walkmod.eclipse.launching;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.internal.launching.LaunchingMessages;
@@ -22,8 +20,6 @@ import org.walkmod.eclipse.preferences.PreferenceConstants;
 public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 
 	private Bundle bundle = Platform.getBundle("org.walkmod.eclipse.libs");
-
-	private String log4jCfgFile = "log4j.properties";
 
 	private List<String> configFiles = null;
 
@@ -48,51 +44,25 @@ public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 		return vm;
 	}
 
-	public String getLog4jCfgFile(ILaunchConfiguration configuration) throws CoreException {
-		loadConfigFiles(configuration);
-		return log4jCfgFile;
-	}
-
 	private void loadConfigFiles(ILaunchConfiguration configuration)
 			throws CoreException {
 		if (configFiles == null) {
 			configFiles = new LinkedList<String>();
 			String installDir = configuration.getAttribute(
 					LaunchingConstants.INSTALL_DIR, "");
-			if (installDir == null || "".equals(installDir.trim())
-					|| installDir.startsWith("EMBEDDED")) {
-
-				Enumeration<String> classPath = bundle.getEntryPaths("/");
-				while (classPath.hasMoreElements()) {
-					String entry = classPath.nextElement();
-					try {
-						String file = new File(FileLocator.resolve(
-								bundle.getEntry(entry)).toURI()).getAbsolutePath();
-						if (file.endsWith(log4jCfgFile)) {
-							log4jCfgFile = file;
-						}
-						// result.add(file);
-					} catch (Exception e) {
-						RuntimeException re = new RuntimeException(
-								"Error resolving the lib paths");
-						re.setStackTrace(e.getStackTrace());
-						throw re;
-					}
-				}
-
-			} else {
+			if (!(installDir == null || "".equals(installDir.trim()) || installDir
+					.startsWith("EMBEDDED"))) {
 				if (installDir.startsWith("EXTERNAL (")) {
 					installDir = installDir.substring("EXTERNAL (".length(),
 							installDir.lastIndexOf(")"));
 				}
 				File configDir = new File(installDir, "config");
-				File[] content = configDir.listFiles();
-				for (File entry : content) {
-					if (entry.getName().endsWith(log4jCfgFile)) {
-						log4jCfgFile = entry.getAbsolutePath();
-					}
-					configFiles.add(entry.getAbsolutePath());
+				if (!configDir.exists()) {
+					throw new RuntimeException("The config dir "
+							+ configDir.getAbsolutePath() + " does not exists");
 				}
+				configFiles.add(configDir.getAbsolutePath());
+				
 			}
 		}
 	}
@@ -172,6 +142,7 @@ public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 		return "org.walkmod.WalkModDispatcher";
 	}
 
+
 	/**
 	 * Returns the program arguments specified by the given launch
 	 * configuration, as a string. The returned string is empty if no program
@@ -196,14 +167,6 @@ public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 
 		String args = "";
 
-		
-		try {
-			args = "-Dlog4j.configuration=\"" + getLog4jCfgFile(configuration) + "\"";
-		} catch (Exception e) {
-			RuntimeException re = new RuntimeException();
-			re.setStackTrace(e.getStackTrace());
-			throw re;
-		}
 		if (isOffline) {
 			args += " --offline";
 		}
@@ -211,12 +174,16 @@ public class WalkmodLaunchDelegate extends JavaLaunchDelegate {
 			args += " -e";
 		}
 
-		List<String> chains = configuration.getAttribute(
-				LaunchingConstants.SELECTED_CHAINS, new LinkedList<String>());
+		if (configuration.hasAttribute(LaunchingConstants.SELECTED_CHAINS)) {
+			List<String> chains = configuration.getAttribute(
+					LaunchingConstants.SELECTED_CHAINS,
+					new LinkedList<String>());
 
-		String chainNames = "";
-		for (String chain : chains) {
-			chainNames = chainNames + " " + chain;
+			String chainNames = "";
+			for (String chain : chains) {
+				chainNames = chainNames + " " + chain;
+			}
+			args += chainNames;
 		}
 
 		args = configuration.getAttribute(LaunchingConstants.SELECTED_OPTION,

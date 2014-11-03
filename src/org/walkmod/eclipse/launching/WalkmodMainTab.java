@@ -59,7 +59,7 @@ public class WalkmodMainTab extends AbstractJavaMainTab {
 
 	protected void createChainListEditor(Composite parent) {
 
-		System.out.println("init components");
+		
 		if (option == null) {
 
 			Group optionGroup = createGroupComponent(parent, SWT.NONE,
@@ -129,15 +129,17 @@ public class WalkmodMainTab extends AbstractJavaMainTab {
 
 			installDirectory.add(embedded, 0);
 
-			if (!"".equals(store.getDefaultString(
+			if (!"".equals(store.getString(
 					PreferenceConstants.WALKMOD_EXTERNAL_HOME).trim())) {
 				String external = "EXTERNAL ("
-						+ store.getDefaultString(PreferenceConstants.WALKMOD_EXTERNAL_HOME)
+						+ store.getString(PreferenceConstants.WALKMOD_EXTERNAL_HOME)
 						+ ")";
 				installDirectory.add(external, 1);
 				installDirectory.select(1);
 			}
-			if (store.getBoolean(PreferenceConstants.WALKMOD_IS_EMBEDDED)) {
+			String installDir = store.getString(LaunchingConstants.INSTALL_DIR);
+			
+			if (installDir.equals("") || installDir.startsWith("EMBEDDED")) {
 				installDirectory.select(0);
 			}
 		}
@@ -255,7 +257,7 @@ public class WalkmodMainTab extends AbstractJavaMainTab {
 
 		// se llama al arrancar por cada componente hijo
 		// updateProjectFromConfig(configuration);
-		System.out.println("apply");
+		
 		if (option != null) {
 			config.setAttribute(LaunchingConstants.SELECTED_OPTION, option.getText());
 		}
@@ -282,7 +284,7 @@ public class WalkmodMainTab extends AbstractJavaMainTab {
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy config) {
-		System.out.println("set defaults");
+		
 		config.setAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
 
@@ -298,18 +300,12 @@ public class WalkmodMainTab extends AbstractJavaMainTab {
 		config.setAttribute(LaunchingConstants.PRINT_ERRORS_OPTION, false);
 
 		config.setAttribute(LaunchingConstants.SELECTED_CHAINS, selectedChains);
-		if (store.getBoolean(PreferenceConstants.WALKMOD_IS_EMBEDDED)) {
+		if (store.getString(LaunchingConstants.INSTALL_DIR).equals("")) {
 			config.setAttribute(
 					LaunchingConstants.INSTALL_DIR,
 					"EMBEDDED ("
 							+ store.getDefaultString(PreferenceConstants.WALKMOD_EMBEDDED_VERSION)
 							+ ")");
-		} else {
-			config.setAttribute(
-					LaunchingConstants.INSTALL_DIR,
-					"EXTERNAL ("
-							+ store.getDefaultString(PreferenceConstants.WALKMOD_EXTERNAL_HOME)
-							+ "");
 		}
 
 	}
@@ -338,7 +334,7 @@ public class WalkmodMainTab extends AbstractJavaMainTab {
 	}
 
 	public void updateProjectFromConfig(ILaunchConfiguration config) {
-		System.out.println("loading launching config");
+		
 
 		try {
 			config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, "");
@@ -368,14 +364,14 @@ public class WalkmodMainTab extends AbstractJavaMainTab {
 						.getAttribute(
 								LaunchingConstants.INSTALL_DIR,
 								"EMBEDDED ("
-										+ store.getDefaultString(PreferenceConstants.WALKMOD_EMBEDDED_VERSION)
+										+ store.getString(PreferenceConstants.WALKMOD_EMBEDDED_VERSION)
 										+ ")");
 				if ("".equals(installDir)) {
 					installDir = "EMBEDDED ("
-							+ store.getDefaultString(PreferenceConstants.WALKMOD_EMBEDDED_VERSION)
+							+ store.getString(PreferenceConstants.WALKMOD_EMBEDDED_VERSION)
 							+ ")";
 				} else {
-					installDir = "EXTERNAL (" + installDir + ")";
+					installDir = "EXTERNAL (" +  store.getString(PreferenceConstants.WALKMOD_EXTERNAL_HOME) + ")";
 				}
 
 				int pos = Arrays.binarySearch(installDirectory.getItems(),

@@ -6,6 +6,7 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.walkmod.eclipse.launching.Activator;
+import org.walkmod.eclipse.launching.LaunchingConstants;
 import org.walkmod.eclipse.WalkmodHomeEditor;
 
 /**
@@ -41,7 +42,15 @@ public class WalkmodPreferencePage extends FieldEditorPreferencePage implements
 				"&Use the embedded version", getFieldEditorParent()) {
 			@Override
 			protected void valueChanged(boolean oldValue, boolean newValue) {
-				fieldEditor.setEnabled(!newValue, getFieldEditorParent());				
+				fieldEditor.setEnabled(!newValue, getFieldEditorParent());
+				if(newValue == true){
+					String version  = getPreferenceStore().getString(PreferenceConstants.WALKMOD_EMBEDDED_VERSION);
+					getPreferenceStore().setValue(LaunchingConstants.INSTALL_DIR, "EMBEDDED ("+version+")");
+				}
+				else{
+					String installDir = getPreferenceStore().getString(PreferenceConstants.WALKMOD_EXTERNAL_HOME);
+					getPreferenceStore().setValue(LaunchingConstants.INSTALL_DIR, "EXTERNAL ("+installDir+")");
+				}
 			}
 		});
 		fieldEditor = new WalkmodHomeEditor(getFieldEditorParent());
